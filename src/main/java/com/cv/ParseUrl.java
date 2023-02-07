@@ -9,7 +9,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 
 public class ParseUrl {
-    String authToken =System.getenv("auth_token");
+    private String authToken =System.getenv("auth_token");
     public String getJsonData(String url) throws IOException {
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(url);

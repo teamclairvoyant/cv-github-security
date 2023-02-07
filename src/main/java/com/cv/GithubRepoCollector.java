@@ -1,21 +1,24 @@
 package com.cv;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
-public class ListGithubRepo {
+public class GithubRepoCollector {
     private ParseUrl parseUrl = new ParseUrl();
     private JsonParser jsonParser = new JsonParser();
-    private CSVWriter csvWriter = new CSVWriter();
 
     public static void main(String[] args) throws IOException {
-        ListGithubRepo listGithubRepo = new ListGithubRepo();
-        listGithubRepo.getGithubRepoList();
+        CSVWriter csvWriter = new CSVWriter();
+        GithubRepoCollector githubRepoCollector = new GithubRepoCollector();
+        List<RepositoryInfo> repositoryInfoList = githubRepoCollector.getGithubRepoList();
+        System.out.println(repositoryInfoList);
+        csvWriter.write(repositoryInfoList);
     }
 
-    public Map<String, String> getGithubRepoList() throws IOException {
-        Map<String, String> map = new HashMap<>();
+    public List<RepositoryInfo> getGithubRepoList() throws IOException {
+        List<RepositoryInfo> repositoryInfoList = new LinkedList<>();
         for (int i = 1; i <= 2; i++) {
             String url = "https://api.github.com/orgs/teamclairvoyant/repos";
             StringBuilder sb = new StringBuilder();
@@ -28,21 +31,18 @@ public class ListGithubRepo {
                     .append("=")
                     .append(100);
             url = url + sb;
-            map.putAll(parse(url));
+            repositoryInfoList.addAll(parse(url));
         }
-        //csvWriter.write(map);
-        return map;
+        return repositoryInfoList;
     }
 
-    public Map<String, String> parse(String url) {
-        Map<String, String> map = null;
+    public List<RepositoryInfo> parse(String url) {
         try {
             String json = parseUrl.getJsonData(url);
-            map = jsonParser.getRepositoryUrl(json);
-            //repoContributors = jsonParser.getRepoContributors(map, parseUrl);
+            return jsonParser.getRepositoryInfo(json);
         } catch (IOException ex) {
             System.out.println(ex.getStackTrace());
         }
-        return map;
+        return Collections.emptyList();
     }
 }
