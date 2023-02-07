@@ -10,7 +10,7 @@ import java.util.List;
 public class CSVWriter {
     public void write(List<RepositoryInfo> repositoryInfoList) throws IOException {
         //create a CSV printer
-        String fileName = "cv_github_repo_information1.csv";
+        String fileName = "cv_github_repo_information.csv";
         CSVPrinter printer = new CSVPrinter(new FileWriter(fileName), CSVFormat.DEFAULT);
         //create header row
         printer.printRecord("name","description","repoUrl", "languages", "contributors");
