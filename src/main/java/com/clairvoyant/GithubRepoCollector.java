@@ -1,4 +1,4 @@
-package com.cv;
+package com.clairvoyant;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class GithubRepoCollector {
-    private ParseUrl parseUrl = new ParseUrl();
+    private UrlParser urlParser = new UrlParser();
     private JsonParser jsonParser = new JsonParser();
 
     public static void main(String[] args) throws IOException {
@@ -38,7 +38,7 @@ public class GithubRepoCollector {
 
     public List<RepositoryInfo> parse(String url) {
         try {
-            String json = parseUrl.getJsonData(url);
+            String json = urlParser.getJsonData(url);
             return jsonParser.getRepositoryInfo(json);
         } catch (IOException ex) {
             System.out.println(ex.getStackTrace());

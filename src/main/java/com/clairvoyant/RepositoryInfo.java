@@ -1,4 +1,4 @@
-package com.cv;
+package com.clairvoyant;
 
 import lombok.Data;
 

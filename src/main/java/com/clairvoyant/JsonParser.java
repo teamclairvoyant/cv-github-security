@@ -1,4 +1,4 @@
-package com.cv;
+package com.clairvoyant;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class JsonParser {
-    private ParseUrl parseUrl = new ParseUrl();
+    private UrlParser urlParser = new UrlParser();
 
     public List<RepositoryInfo> getRepositoryInfo(String json) throws IOException {
         JsonElement jsonElement = new com.google.gson.JsonParser().parse(json);
@@ -50,7 +50,7 @@ public class JsonParser {
 
     private List<String> getProgrammingLanguages(String apiUrl) throws IOException {
         apiUrl = apiUrl + "/languages";
-        String jsonData = parseUrl.getJsonData(apiUrl);
+        String jsonData = urlParser.getJsonData(apiUrl);
         List<String> languages = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree(jsonData);
@@ -61,14 +61,16 @@ public class JsonParser {
 
     private List<String> getContributors(String apiUrl) throws IOException {
         apiUrl = apiUrl + "/contributors";
-        String jsonData = parseUrl.getJsonData(apiUrl);
+        String jsonData = urlParser.getJsonData(apiUrl);
         JsonElement jsonElement = new com.google.gson.JsonParser().parse(jsonData);
-        JsonArray jsonArray = jsonElement.getAsJsonArray();
         List<String> contributors = new ArrayList<>();
-        for (int i = 0; i < jsonArray.size(); i++) {
-            JsonObject jsonObject = (JsonObject) jsonArray.get(i);
-            String login = getFieldInfo(jsonObject, "login");
-            contributors.add(login);
+        if(jsonElement.isJsonArray()) {
+            JsonArray jsonArray = jsonElement.getAsJsonArray();
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JsonObject jsonObject = (JsonObject) jsonArray.get(i);
+                String login = getFieldInfo(jsonObject, "login");
+                contributors.add(login);
+            }
         }
         return contributors;
     }
