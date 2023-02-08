@@ -13,7 +13,7 @@ Prerequisite
 
 For example 
 
-    export auth_token = "Bearer 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"
+    export auth_token = "Bearer actual_token"
 
 Run below command
 
